@@ -13,12 +13,15 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 app.layout = html.Div([
     dcc.Graph(id='graph-1'),
-    dcc.Slider(id='slider-1', min=df.year.min(), max=df.year.max(), value=df.year.min(), marks={str(year): str(year) for year in df.year.unique()}, step=None)
+    dcc.Slider(id='slider-1', min=df.year.min(), max=df.year.max(), value=df.year.min(),
+               marks={str(year): str(year) for year in df.year.unique()}, step=None),
+    html.Div(id='div-1', children='')
 ])
 
 
 @app.callback(
     Output('graph-1', 'figure'),
+    #Output('div-1', 'children'),
     [Input('slider-1', 'value')]
 )
 def update_graph(selected_year):
@@ -37,7 +40,7 @@ def update_graph(selected_year):
                     'size': 15,
                     'line': {'width': 1.5, 'color': 'white'}
                 },
-                hover
+                text=dff_cont['country']
             )
 
         )
@@ -45,14 +48,12 @@ def update_graph(selected_year):
         'data': traces,
         'layout': go.Layout(
             title_text='Wykres',
-            xaxis={'type': 'log', 'title':'PKB per capita'},
+            xaxis={'type': 'log', 'title': 'PKB per capita'},
             yaxis={'title': 'Oczekiwana długość życia'},
             hovermode='closest'
         )
     }
 
+
 if __name__ == '__main__':
     app.run_server(debug=True)
-
-
-
