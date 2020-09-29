@@ -3,11 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
-import base64
-import io
-import pandas as pd
 from datetime import datetime
-import dash_table
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
@@ -36,31 +32,13 @@ app.layout = html.Div([
 ])
 
 def parse_contents(content, name, date):
-    content_type, content_string = content.split(',')
-
-    decoded = base64.b64decode(content_string)
-    try:
-        if 'csv' in name:
-            df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
-        elif 'xls' in name:
-            df = pd.read_excel(io.BytesIO(decoded))
-    except Exception as e:
-        print(e)
-        return html.Div([
-            'Wystąpił błąd podczas przetwarzania pliku'
-        ])
     return html.Div([
         html.H5(name),
         html.H6(datetime.fromtimestamp(date)),
-
-        dash_table.DataTable(
-            data=df.to_dict('records'),
-            columns=[{'name': col, 'id': col} for col in df.columns]
-        ),
         html.Hr(),
-        html.Div('Raw content'),
-        html.Pre(content[:300] + '...')
+        html.Img(src=content)
     ])
+
 
 @app.callback(
     Output('div-1', 'children'),
