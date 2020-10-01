@@ -31,7 +31,15 @@ app.layout = html.Div([
 )
 def update_graph(value):
     print(value)
-
+    data_dict = {
+        'PL': [3, 2, 5, 4, 7],
+        'GER': [4, 1, 3, 4, 2]
+    }
+    return {'data': [
+        {'y': data_dict[value],
+        'type': 'scatter',
+         'fill': 'tozeroy'}
+    ]}
 
 if __name__ == '__main__':
     app.run_server(debug=True)
